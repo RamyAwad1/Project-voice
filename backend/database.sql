@@ -1,0 +1,12 @@
+CREATE TABLE polls (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE options (
+    id SERIAL PRIMARY KEY,
+    poll_id INTEGER REFERENCES polls(id) ON DELETE CASCADE,
+    option_text VARCHAR(255) NOT NULL,
+    votes INTEGER DEFAULT 0
+);
