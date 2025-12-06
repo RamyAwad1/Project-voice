@@ -1,0 +1,11 @@
+### 1. Create a New Poll
+POST http://localhost:5000/api/polls
+Content-Type: application/json
+
+{
+    "title": "What is your favorite programming language?",
+    "options": ["JavaScript", "Python", "C#", "Rust"]
+}
+
+### 2. Get a Poll by ID (Replace 1 with the actual ID you get back)
+GET http://localhost:5000/api/polls/1

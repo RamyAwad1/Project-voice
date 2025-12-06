@@ -14,7 +14,7 @@ router.post('/',async(req , res)=>{
 
         //insert all options by looping through them
         // promise.all is used to make sure all options are saved before finishing
-        const optionPromises = options.Map((opt)=>{
+        const optionPromises = options.map((opt)=>{
             return pool.query(
                 'INSERT INTO options (poll_id,option_text) VALUES ($1,$2)',[newPoll.id,opt]
             );
@@ -41,7 +41,7 @@ router.get('/:id',async(req,res)=>{
         //get the poll options for this poll 
         const options= await pool.query('SELECT * FROM options WHERE poll_id=$1',[id]);
 
-        if(polls.rows.length===0){
+        if(poll.rows.length===0){
             return res.status(404).json({msg:"Poll not found !!"});
         }
 
