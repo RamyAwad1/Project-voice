@@ -56,4 +56,37 @@ router.get('/:id',async(req,res)=>{
     }
 });
 
+//3. Vote to an option from the poll 
+router.post('/:id/vote',async(req,res)=>{
+
+    const {optionId}=req.body; //send the option from the frontend 
+    const {id}=req.params;
+    try{
+        // as simple sql to find the option by id and add 1 to the votes
+       const update= await pool.query(
+            'UPDATE options SET votes = votes + 1 WHERE id=$1 RETURNING *',[optionId]
+        );
+
+        if(update.rows.length === 0){
+            return res.status(404).json({msg:"Option not found"});
+        }
+
+        //get the io instance from the server.js 
+        const io=req.app.get('socketio');
+
+        //now we emit the update event to everyone by sending the id and the updated option data
+        io.emit('voteUpdate' , {
+            pollId:id,
+            updatedOption:update.rows[0]
+         });
+
+
+        res.json({message:"Vote counted!",updatedOption:update.rows[0]});
+    }catch(err){
+        console.error("Vote Error",err.message);
+        res.status(500).send('Server Error');
+    }
+
+});
+
 module.exports=router;
